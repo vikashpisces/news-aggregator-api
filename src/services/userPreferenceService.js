@@ -7,15 +7,15 @@ module.exports.getPreferences = async (userEmail) => {
   return userPreferences
 }
 
-module.exports.setPreferences = async (userEmail, categories) => {
+module.exports.setPreferences = async (userEmail, category) => {
   const { preferences } = localData
   const userPreferences = preferences?.find(pref => pref.email === userEmail) || null
 
   // available categories: business, entertainment, general, health, science, sports, technology
   
   if (!userPreferences) {
-    localData.preferences.push({ email: userEmail, categories })
+    localData.preferences.push({ email: userEmail, category })
   } else {
-    userPreferences.categories = categories
+    userPreferences.category = category
   }
 }

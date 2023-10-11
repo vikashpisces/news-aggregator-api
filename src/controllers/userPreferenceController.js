@@ -35,19 +35,19 @@ module.exports.setPreferences = async (req, res) => {
       return res.send(defaultResponse)
     }
 
-    const { categories } = req.body
+    const { category } = req.body
     
-    if (!categories.length) {
+    if (!category) {
       defaultResponse.status = 400
-      defaultResponse.message = 'Please provide at least one category as preference'
+      defaultResponse.message = 'Please provide a category preference'
       return res.send(defaultResponse)
     }
 
-    preferenceService.setPreferences(email, categories)
+    preferenceService.setPreferences(email, category)
 
     defaultResponse.status = 200
     defaultResponse.message = `News Categories set successfully`
-    defaultResponse.data = categories.join(', ')
+    defaultResponse.data = category
     return res.send(defaultResponse)
   } catch (error) {
     console.log('Error while setting preferences. Details: ', error);

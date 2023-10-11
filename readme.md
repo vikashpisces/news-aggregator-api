@@ -19,4 +19,43 @@
     - Response: Status 200 with access token
     
 3. Set user preferences
-4. Fetch news articles from multiple sources
+    - PUT /preferences
+    - Required parameters: 
+        - category
+        - token in authorization header
+    - Available categories are: business, entertainment, general, health, science, sports, technology.
+    - Default is business
+    - Response: Status 200
+
+4. Get user preferences
+    - GET /preferences
+    - Required parameters:
+        - token in authorization header
+    - Response: Status 200 with user preferences, if any set by user.
+
+4. Fetch news articles based on the logged-in user's preferences
+    - GET /news
+    - Required parameters:
+        - token in authorization header
+    - Response: Status 200 with news articles based on the logged-in user's preferred category. Default is business
+
+## Installation
+
+1. Clone the repository:
+``` git clone <repository_url> ```
+
+2. Install dependencies:
+``` npm install ```
+
+
+## Usage
+
+1. Start the server:
+``` npm run start ```
+
+2. Update .env file and configure required fields
+
+2. Access the API routes using the following URL:
+``` http://localhost:PORT/tasks ```
+
+3. Test the API using Postman or Curl:
