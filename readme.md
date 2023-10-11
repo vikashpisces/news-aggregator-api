@@ -33,12 +33,18 @@
         - token in authorization header
     - Response: Status 200 with user preferences, if any set by user.
 
-4. Fetch news articles based on the logged-in user's preferences
+5. Fetch news articles based on the logged-in user's preferences
     - GET /news
     - Required parameters:
         - token in authorization header
     - Response: Status 200 with news articles based on the logged-in user's preferred category. Default is business
 
+6. Implement an endpoint to search for news articles based on keywords
+    - GET /news/search/:keyword
+    - Required parameters:
+        - token in authorization header
+    - Response: Status 200 with news articles for searched keyword
+    
 ## Installation
 
 1. Clone the repository:
