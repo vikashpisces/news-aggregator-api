@@ -23,3 +23,16 @@ module.exports.getNews = async (email) => {
   cache.put(NEWS_API_BASE_URL, newsResponse?.data?.articles, 60000)
   return newsResponse?.data?.articles
 }
+
+module.exports.searchNews = async (keyword) => {
+  const NEWS_API_BASE_URL = `https://newsapi.org/v2/everything?q=${keyword}&apiKey=${process.env.NEWS_API_KEY}`
+  console.log('NEWS_API_BASE_URL', NEWS_API_BASE_URL)
+  if(cache.get(NEWS_API_BASE_URL)) {
+    console.log('Data already present in cache, returning from cache itself')
+    return cache.get(NEWS_API_BASE_URL)
+  }
+
+  const newsResponse = await axios.get(NEWS_API_BASE_URL)
+  cache.put(NEWS_API_BASE_URL, newsResponse?.data?.articles, 60000)
+  return newsResponse?.data?.articles
+}
