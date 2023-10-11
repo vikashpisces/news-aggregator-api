@@ -1,5 +1,7 @@
 const { default: axios } = require('axios')
 const localData = require('../data/db.json')
+const cache = require('memory-cache')
+
 
 module.exports.getNews = async (email) => {
   let NEWS_API_BASE_URL = `https://newsapi.org/v2/top-headlines?apiKey=${process.env.NEWS_API_KEY}`
@@ -11,6 +13,13 @@ module.exports.getNews = async (email) => {
   NEWS_API_BASE_URL = `${NEWS_API_BASE_URL}&category=${category}`
 
   console.log('NEWS_API_BASE_URL', NEWS_API_BASE_URL)
+
+  if (cache.get(NEWS_API_BASE_URL)) {
+    console.log('Data already present in cache, returning from cache itself')
+    return cache.get(NEWS_API_BASE_URL)
+  }
+
   const newsResponse = await axios.get(NEWS_API_BASE_URL)
+  cache.put(NEWS_API_BASE_URL, newsResponse?.data?.articles, 60000)
   return newsResponse?.data?.articles
 }
