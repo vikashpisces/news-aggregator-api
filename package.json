@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "unit": "jest --watch --coverage"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +19,8 @@
     "jsonwebtoken": "^9.0.2",
     "memory-cache": "^0.2.0",
     "mongoose": "^7.6.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
