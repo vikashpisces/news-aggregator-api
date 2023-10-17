@@ -6,69 +6,72 @@ describe('Module: authMiddleware', () => {
   describe('Verify methods', () => {
 
     describe('verifyToken', () => {
-      let responseStatusFunction = jest.fn(function () { return this })
-      let responseSendFunction = jest.fn()
+      const mockRequest = (headers) => {
+        return headers
+      }
+      
+      const mockResponse = () => {
+        const res = {}
+        res.status = jest.fn().mockReturnValue(res)
+        res.send = jest.fn().mockReturnValue(res)
+        return res
+      }
 
-      let mockResponse = {
-        status: responseStatusFunction,
-        send: responseSendFunction
-      };
-
-      let mockNext = jest.fn();
-
+      const mockNext = jest.fn();
       beforeEach(() => { })
 
       afterEach(() => {
-        responseStatusFunction.mockClear();
-        responseSendFunction.mockClear();
         mockNext.mockClear()
       })
 
       it('should verify missing request headers', () => {
-        let mockRequest = {}
-        
-        authMiddleWare.verifyToken(mockRequest, mockResponse, mockNext);
+        const req = mockRequest({})
+        const res = mockResponse()
 
-        expect(responseStatusFunction).toHaveBeenCalledTimes(1);
-        expect(responseStatusFunction).toHaveBeenCalledWith(401);
+        authMiddleWare.verifyToken(req, res, mockNext);
 
-        expect(responseSendFunction).toHaveBeenCalledTimes(1);
-        expect(responseSendFunction).toHaveBeenCalledWith('Unauthorized');
+        expect(res.status).toHaveBeenCalledTimes(1);
+        expect(res.status).toHaveBeenCalledWith(401);
+
+        expect(res.send).toHaveBeenCalledTimes(1);
+        expect(res.send).toHaveBeenCalledWith('Unauthorized');
 
         expect(mockNext).not.toHaveBeenCalled();
       })
 
       it('should verify missing request headers: authorization', () => {
-        let mockRequest = {
+        const req = mockRequest({
           headers: {}
-        }
+        })
+        const res = mockResponse()
 
-        authMiddleWare.verifyToken(mockRequest, mockResponse, mockNext);
+        authMiddleWare.verifyToken(req, res, mockNext);
 
-        expect(responseStatusFunction).toHaveBeenCalledTimes(1);
-        expect(responseStatusFunction).toHaveBeenCalledWith(401);
+        expect(res.status).toHaveBeenCalledTimes(1);
+        expect(res.status).toHaveBeenCalledWith(401);
 
-        expect(responseSendFunction).toHaveBeenCalledTimes(1);
-        expect(responseSendFunction).toHaveBeenCalledWith('Unauthorized');
+        expect(res.send).toHaveBeenCalledTimes(1);
+        expect(res.send).toHaveBeenCalledWith('Unauthorized');
 
         expect(mockNext).not.toHaveBeenCalled();
 
       })
 
       it('should verify invalid token', () => {
-        let mockRequest = {
+        const req =  mockRequest({
           headers: {
             authorization: 'invalidToken'
           }
-        }
+        })
+        const res = mockResponse()
         
-        authMiddleWare.verifyToken(mockRequest, mockResponse, mockNext);
+        authMiddleWare.verifyToken(req, res, mockNext);
         
-        expect(responseStatusFunction).toHaveBeenCalledTimes(1);
-        expect(responseStatusFunction).toHaveBeenCalledWith(403)
+        expect(res.status).toHaveBeenCalledTimes(1);
+        expect(res.status).toHaveBeenCalledWith(403)
         
-        expect(responseSendFunction).toHaveBeenCalledTimes(1);
-        expect(responseSendFunction).toHaveBeenCalledWith('Forbidden');
+        expect(res.send).toHaveBeenCalledTimes(1);
+        expect(res.send).toHaveBeenCalledWith('Forbidden');
 
         expect(mockNext).not.toHaveBeenCalled();
         
@@ -81,22 +84,23 @@ describe('Module: authMiddleware', () => {
           sub: 'some email'
         }, process.env.JWT_SECRET, { expiresIn: 86400 })
         
-        let mockRequest = {
+        const req = mockRequest({
           headers: {
             authorization: token
           }
-        }
+        })
+        const res = mockResponse()
         
-        expect(mockRequest.user).not.toBeDefined();
+        expect(req.user).not.toBeDefined();
 
-        authMiddleWare.verifyToken(mockRequest, mockResponse, mockNext);
+        authMiddleWare.verifyToken(req, res, mockNext);
         
-        expect(responseStatusFunction).not.toHaveBeenCalled()
-        expect(responseSendFunction).not.toHaveBeenCalled();
+        expect(res.status).not.toHaveBeenCalled()
+        expect(res.status).not.toHaveBeenCalled();
 
         expect(mockNext).toHaveBeenCalled();
         expect(mockNext).toHaveBeenCalledTimes(1);
-        expect(mockRequest.user).toBeDefined();
+        expect(req.user).toBeDefined();
         
       })
 

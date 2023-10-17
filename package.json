@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "unit": "jest --watch --coverage"
+    "test:unit": "jest --coverage --verbose",
+    "test:unit-w": "jest --coverage --verbose --watch"
   },
   "keywords": [],
   "author": "",
