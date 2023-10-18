@@ -1,7 +1,7 @@
 const User = require('../models/UserModel')
 const bcrypt = require('bcrypt')
 const { USER_MESSAGE } = require('../constants')
-const jsonwebtoken = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
 module.exports.userSignup = async (payload) => {
   const user = new User(payload)
@@ -24,7 +24,7 @@ module.exports.userLogin = async (payload) => {
     return Promise.reject({status: 401, message: USER_MESSAGE.invalidUserPwd})
   }
 
-  const token = jsonwebtoken.sign(
+  const token = jwt.sign(
     { id: user._id, role: user.role, sub: user.email },
     process.env.JWT_SECRET,
     {
