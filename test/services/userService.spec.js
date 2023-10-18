@@ -93,8 +93,6 @@ describe('Module: userService', () => {
       })
 
       const response = await userService.userLogin(payload);
-      console.log("response");
-      console.log(typeof response);
       expect(typeof response).toBe("string")
       await expect(jwt.verify(response, process.env.JWT_SECRET)).resolves
     })
