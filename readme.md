@@ -37,7 +37,7 @@
 > Test the API using Postman. Collections are available in public folder for reference
 
 ### Run the unit test cases (with code coverage) using command:
-    npm run unit
+    npm run test:unit
 
 # Available Rest API Endpoints
 
